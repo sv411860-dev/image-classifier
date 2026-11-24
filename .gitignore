@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+venv/
+env/
+.venv/
+ENV/
+
+# Datasets (download dynamically using python download_data.py)
+data/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE / Editor folders
+.vscode/
+.idea/
