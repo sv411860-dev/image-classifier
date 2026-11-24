@@ -21,7 +21,7 @@ MODEL_PATH = "best_model.pth"
 def load_model():
     if not os.path.exists(MODEL_PATH):
         return None, None, None, "None"
-    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     checkpoint = torch.load(MODEL_PATH, map_location=device)
     classes = checkpoint.get("classes", ["cats", "dogs"])
     state_dict = checkpoint["model_state_dict"]
@@ -48,11 +48,26 @@ if model is None:
     st.code("python train_transfer.py", language="bash")
 else:
     st.caption(f"Active Architecture: **{model_name}** | Running on: **{device.type.upper()}**")
+
+    sample_options = {
+        "Upload your own image": None,
+        "🐱 Sample: Fluffy Kitten (Edge Case)": "test_data/Unknown.webp",
+        "🐶 Sample: Dog": "test_data/dog.webp",
+        "🐍 Sample: Snake (Out of Distribution)": "test_data/snake.jpeg"
+    }
+
+    selected_sample = st.selectbox("Try a sample image or upload your own below:", list(sample_options.keys()))
+
     uploaded_file = st.file_uploader("Upload an image of a Cat or Dog", type=["jpg", "jpeg", "png", "webp"])
 
+    image = None
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="Uploaded Image", use_container_width=True)
+    elif selected_sample and sample_options[selected_sample] and os.path.exists(sample_options[selected_sample]):
+        image = Image.open(sample_options[selected_sample]).convert("RGB")
+
+    if image is not None:
+        st.image(image, caption="Input Image", use_container_width=True)
 
         transform = transforms.Compose([
             transforms.Resize(img_size),
