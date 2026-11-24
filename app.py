@@ -15,7 +15,8 @@ st.set_page_config(
 
 st.title("🐾 Cat vs Dog Image Classifier")
 
-MODEL_PATH = "best_model.pth"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "best_model.pth")
 
 @st.cache_resource
 def load_model():
@@ -51,9 +52,9 @@ else:
 
     sample_options = {
         "Upload your own image": None,
-        "🐱 Sample: Fluffy Kitten (Edge Case)": "test_data/Unknown.webp",
-        "🐶 Sample: Dog": "test_data/dog.webp",
-        "🐍 Sample: Snake (Out of Distribution)": "test_data/snake.jpeg"
+        "🐱 Sample: Fluffy Kitten (Edge Case)": os.path.join(BASE_DIR, "test_data", "Unknown.webp"),
+        "🐶 Sample: Dog": os.path.join(BASE_DIR, "test_data", "dog.webp"),
+        "🐍 Sample: Snake (Out of Distribution)": os.path.join(BASE_DIR, "test_data", "snake.jpeg")
     }
 
     selected_sample = st.selectbox("Try a sample image or upload your own below:", list(sample_options.keys()))

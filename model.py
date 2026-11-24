@@ -70,3 +70,11 @@ def get_model(model_type="transfer", num_classes=2, pretrained=True):
         return CatDogTransfer(num_classes=num_classes, pretrained=pretrained)
     else:
         return CatDogCNN(num_classes=num_classes)
+
+if __name__ == "__main__":
+    import os
+    import runpy
+    app_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app.py")
+    if os.path.exists(app_file):
+        runpy.run_path(app_file, run_name="__main__")
+
